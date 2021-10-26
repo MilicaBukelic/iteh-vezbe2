@@ -1,35 +1,30 @@
 <?php
-
-    require "model/user.php";
-
-    session start();
-    if(isset($_POST['usrename'])  && isset($_POST['password'])){
-        $uname = isset($_POST['usrename']);
-        $upass = isset($_POST['password']);
-        $conn = new mysqli();
-        $korisnik = User(null,$uname, $upass);
-        //$odg = $korisnik->logInUser($uname, $upass, $conn);
-        $odg = User::logInUser($korisnik, $conn);
-        if($odg){
-            echo `
-            <script>       
-            console.log("Uspesno ste se prijavili");
-            </script>
-            `;
-
-            $_SESSION['user_id'] = $korisnik -> id;
-            header('Location: home.php')
-
-            exit();
-        }else{
-            echo `
-            <script>       
-            console.log("Uspesno ste se prijavili");
-            </script>
-            `;
-        }
+require "model/user.php";
+require "dbBroker.php";
+session_start();
+if(isset($_POST["username"])and isset($_POST["password"])){
+    $uname=$_POST["username"];
+    $upass=$_POST["password"];
+    echo $uname;
+    echo "<br>";
+    echo $upass;
+    echo "<br>";
+    $korisnik = new User(1,$uname,$upass);
+    echo $korisnik->username;
+    echo "<br>"; 
+    echo $korisnik->password;
+    echo "<br>";
+    //$odg=$korisnik->logInUser($uname,$upass,mysqli); - obična funkcija
+    $odg=User::logInUser($korisnik,$conn);
+    if($odg->num_rows==1){
+        echo '<script>console.log("Uspešno ste se prijavili")</script>';
+        $_SESSION['user_id']=$korisnik->id;
+        header('Location: home.php');
+        exit();
+    }else{
+        echo '<script>console.log("Niste se uspešno prijavili")</script>';
     }
-
+}
 ?>
 
 <!DOCTYPE html>

@@ -1,3 +1,28 @@
+<?php
+
+    require "dbBroker.php";
+    require "model/prijava.php";
+
+    session_start();
+
+    if(!isset($_SESSION['user_id'])){
+        header('Location: index.php');
+        exit();
+    }
+
+    $rezultat = Prijava :: getAll($conn);
+    if(!$rezultat){
+        echo "Nastala je greska prilikom izvodjenja upita. <br>";
+        die();
+    }
+    if($rezultat->num_rows == 0){
+        echo "Nema prijava na kolokvijume.";
+        die();
+    }
+    else{
+
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,8 +71,8 @@
             </tr>
             </thead>
             <tbody>
-            <?php
-            while ($red = $result->fetch_array()) {
+                <?php
+                    while($red = $rezultat -> fetch_array()):
                 ?>
                 <tr>
                     <td><?php echo $red["predmet"] ?></td>
@@ -63,8 +88,11 @@
 
                 </tr>
                 <?php
+                    endwhile;
+
             }
-            } ?>
+                ?>
+                
             </tbody>
         </table>
         <div class="row" >
@@ -120,7 +148,7 @@
                                 </div>
                                 <div class="form-group">
                                     <button id="btnDodaj" type="submit" class="btn btn-success btn-block"
-                                    tyle="background-color: orange; border: 1px solid black;">Zakazi</button>
+                                    style="background-color: orange; border: 1px solid black;">Zakazi</button>
                                 </div>
                             </div>
                     </div>
@@ -195,7 +223,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="js/main.js"></script>
-
+<script src="js/main1.js"></script>
 
 
 </body>
